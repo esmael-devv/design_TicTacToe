@@ -30,4 +30,15 @@ public class Board {
 
         return Collections.nCopies(size, firstRow);
     }
+
+    public boolean isEmpty(int row, int col) {
+       return cells.get(row).get(col).getSymbol() == null;
+    }
+
+    public void update(BoardCell move) {
+        int row = move.getRow();
+        int col = move.getCol();
+        BoardCell cell = cells.get(row).get(col);
+        cell.setSymbol(move.getSymbol());
+    }
 }

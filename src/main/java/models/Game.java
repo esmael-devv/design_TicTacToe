@@ -24,14 +24,25 @@ public class Game {
 
 
 
-    public void start(){}
+    public void start(){
+        // Assign a random value to the nextPlayerIndex
+        // randome value -> 0 or 1
+        // 0.5 * 2 = 1.0 = 1
+        // 0.1 * 2 = 0.2 = 0
+        // 0.8 * 2 = 1.6 = 1
+        nextPlayerIndex = (int) (Math.random() * players.size());
+
+        //set the status to IN_PROGRESS
+        status = DEFAULT_STATUS;
+
+    }
 
     public void makeMove(){
         //get the next move
         BoardCell move = getNextMove();
         // Validate the move - check if the cell was already filled
 //        validateMove(move);
-//        we can even validate this move in our next move method
+//        we can even validate this move in our nextMove method
         //makeMove
         //Bot - PlayingStrategy
         //User - input = Scanner
@@ -79,6 +90,10 @@ public class Game {
 
     public static Builder builder(){
         return new Builder();
+    }
+
+    public Player getNextPlayer() {
+        return players.get(nextPlayerIndex);
     }
 
     public static class Builder{

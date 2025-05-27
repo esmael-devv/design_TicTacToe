@@ -4,6 +4,8 @@ import exceptions.InvalidMoveException;
 import exceptions.InvalidPlayersException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import strategies.RowWinningStrategy;
+import strategies.WinningStrategy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +15,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Getter
 
-public class Game {
+public class Game{
     private static  final int PLAYER_COUNT = 2;
     private static final GameStatus DEFAULT_STATUS = GameStatus.IN_PROGRESS;
 
@@ -21,6 +23,8 @@ public class Game {
     private List<Player> players = new ArrayList<>();
     private GameStatus status;
     private int nextPlayerIndex = 0;
+    private  Player winner;
+    private List<WinningStrategy>  winningStrategies = List.of(new RowWinningStrategy());
 
 
 
@@ -51,13 +55,16 @@ public class Game {
         board.update(move);
 
         //check for a winner
-        if(checkWinner()){
+        if(checkWinner(move.getSymbol())){
             status = GameStatus.FINISHED;
+            winner = getNextPlayer();
+            return;
         }
 
         //check for a draw
         if(checkDraw()){
            status = GameStatus.DRAWN;
+           return;
         }
 
        nextPlayerIndex = (nextPlayerIndex + 1) % PLAYER_COUNT;
@@ -79,9 +86,19 @@ public class Game {
         return move;
     }
 
-    private boolean checkWinner(){
+    private boolean checkWinner(GameSymbol symbol){
+        // Implement check rows
+        for(WinningStrategy strategy : winningStrategies){
+            boolean hasWinner = strategy.checkWinner(getBoard(), symbol);
+            if(hasWinner){
+                return true;
+            }
+        }
         return false;
+        // check cols and diagonal
     }
+
+
 
     private boolean checkDraw(){
         return false;

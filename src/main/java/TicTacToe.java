@@ -17,10 +17,11 @@ public class TicTacToe {
         Game game = createGame(human);
         game.start();
 
-        Player player = game.getNextPlayer();
-        System.out.println("Next Player: " + player.getSymbol());
+
         //initialize the bot player
         // H vs B
+
+
 
 
 
@@ -28,9 +29,27 @@ public class TicTacToe {
         //assign the first player
         //mark the game in progress
 
+        // Iteratively call makeMove
+        // unitl -> game is won or drawn
+
+        while(game.getStatus() == GameStatus.IN_PROGRESS){
+            Player player = game.getNextPlayer();
+            System.out.println("Next Player: " + player.getSymbol());
+
+            game.makeMove();
+            game.getBoard().printBoard();
+        }
+
+
+
 
         //start playing
         //
+
+        if(game.getStatus() == GameStatus.FINISHED){
+            System.out.println("Winner is " + game.getWinner().getSymbol());
+
+        }
     }
 
     private static Game createGame(HumanPlayer humanPlayer) {
@@ -66,6 +85,9 @@ public class TicTacToe {
 
         User user = new User(name, email, null);
 
-        return new HumanPlayer(symbol, user);
+        return  HumanPlayer.builder()
+                .symbol(symbol)
+                .user(user).build();
+
     }
 }
